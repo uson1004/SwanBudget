@@ -61,4 +61,3 @@ export function validateCardNumber(number: string): boolean {
 
   return sum % 10 === 0
 }
-

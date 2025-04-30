@@ -2,10 +2,17 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Menu, Home, CreditCard, BarChart3, Settings } from "lucide-react"
+import { usePathname, useRouter } from "next/navigation"
+import { Menu, Home, CreditCard, BarChart3, Settings, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
 const routes = [
@@ -34,6 +41,7 @@ const routes = [
 export function Header() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -69,6 +77,17 @@ export function Header() {
                   {route.label}
                 </Link>
               ))}
+              <Link
+                href="/mypage"
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 text-lg font-medium rounded-md hover:bg-accent",
+                  pathname === "/mypage" ? "bg-accent" : "transparent",
+                )}
+              >
+                <User className="h-5 w-5" />
+                마이페이지
+              </Link>
             </nav>
           </SheetContent>
         </Sheet>
@@ -92,13 +111,27 @@ export function Header() {
         </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <nav className="flex items-center space-x-1">
-            <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
-              <span className="font-semibold">홍</span>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full">
+                  <User className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => router.push("/mypage")}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>마이페이지</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>로그아웃</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         </div>
       </div>
     </header>
   )
 }
-

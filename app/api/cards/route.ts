@@ -69,4 +69,3 @@ function detectCardType(number: string) {
   if (re.discover.test(number)) return "Discover"
   return "Unknown"
 }
-
