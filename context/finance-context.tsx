@@ -45,6 +45,7 @@ type FinanceContextType = {
   categories: Category[]
   userSettings: UserSettings
   addTransaction: (transaction: Omit<Transaction, "id">) => void
+  updateTransaction: (id: string, transaction: Omit<Transaction, "id">) => void
   deleteTransaction: (id: string) => void
   addCard: (card: Omit<CardInfo, "id">) => void
   deleteCard: (id: string) => void
@@ -166,11 +167,26 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
 
   // 거래 추가 함수
   const addTransaction = (transaction: Omit<Transaction, "id">) => {
+    console.log("Adding transaction in context:", transaction)
     const newTransaction: Transaction = {
       ...transaction,
       id: Date.now().toString(),
     }
     setTransactions((prev) => [newTransaction, ...prev])
+  }
+
+  // 거래 수정 함수
+  const updateTransaction = (id: string, transaction: Omit<Transaction, "id">) => {
+    setTransactions((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...transaction,
+              id,
+            }
+          : t,
+      ),
+    )
   }
 
   // 거래 삭제 함수
@@ -282,6 +298,7 @@ export function FinanceProvider({ children }: { children: ReactNode }) {
         categories,
         userSettings,
         addTransaction,
+        updateTransaction,
         deleteTransaction,
         addCard,
         deleteCard,
