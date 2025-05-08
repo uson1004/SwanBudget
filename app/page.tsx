@@ -65,23 +65,22 @@ export default function Home() {
 
   // 카테고리 타입이 변경될 때 첫 번째 카테고리로 선택 변경
   useEffect(() => {
-    if (filteredCategories.length > 0) {
+    if (filteredCategories.length > 0 && (!category || !filteredCategories.some((cat) => cat.name === category))) {
       const firstCategory = filteredCategories[0].name
       console.log("Setting initial category to:", firstCategory)
       setCategory(firstCategory)
-    } else {
-      setCategory("")
     }
-  }, [type, filteredCategories])
+  }, [type, filteredCategories, category])
 
   // 수정 모드에서 카테고리 타입이 변경될 때 첫 번째 카테고리로 선택 변경
   useEffect(() => {
-    if (editFilteredCategories.length > 0) {
+    if (
+      editFilteredCategories.length > 0 &&
+      (!editCategory || !editFilteredCategories.some((cat) => cat.name === editCategory))
+    ) {
       setEditCategory(editFilteredCategories[0].name)
-    } else {
-      setEditCategory("")
     }
-  }, [editType, editFilteredCategories])
+  }, [editType, editFilteredCategories, editCategory])
 
   // 거래 추가 함수
   const handleAddTransaction = () => {
@@ -343,6 +342,7 @@ export default function Home() {
                     onValueChange={(value) => {
                       console.log("Category selected:", value)
                       setCategory(value)
+                      // 카테고리 선택 후 다른 상태 변경 없음
                     }}
                   >
                     <SelectTrigger id="category">
