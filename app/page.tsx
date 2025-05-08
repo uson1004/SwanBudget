@@ -66,8 +66,9 @@ export default function Home() {
   // 카테고리 타입이 변경될 때 첫 번째 카테고리로 선택 변경
   useEffect(() => {
     if (filteredCategories.length > 0) {
-      console.log("Setting initial category to:", filteredCategories[0].name)
-      setCategory(filteredCategories[0].name)
+      const firstCategory = filteredCategories[0].name
+      console.log("Setting initial category to:", firstCategory)
+      setCategory(firstCategory)
     } else {
       setCategory("")
     }
@@ -84,6 +85,14 @@ export default function Home() {
 
   // 거래 추가 함수
   const handleAddTransaction = () => {
+    console.log("Attempting to add transaction with:", {
+      description,
+      amount,
+      type,
+      category,
+      selectedCardId,
+    })
+
     if (!description || !amount || Number.parseFloat(amount) <= 0 || !category) {
       console.log("Validation failed:", { description, amount, category })
       return
@@ -103,6 +112,7 @@ export default function Home() {
     // 폼 초기화
     setDescription("")
     setAmount("")
+    // 카테고리는 초기화하지 않고 현재 타입에 맞는 첫 번째 카테고리로 유지
     setSelectedCardId(undefined)
   }
 
@@ -352,6 +362,8 @@ export default function Home() {
                       )}
                     </SelectContent>
                   </Select>
+                  {/* 현재 선택된 카테고리 표시 (디버깅용) */}
+                  <div className="text-xs text-muted-foreground">현재 선택된 카테고리: {category || "없음"}</div>
                 </div>
 
                 <div className="space-y-2">
