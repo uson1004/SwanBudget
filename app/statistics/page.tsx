@@ -42,7 +42,32 @@ const aggregateByCategory = (transactions: Transaction[], type: "income" | "expe
 export default function StatisticsPage() {
   const [date, setDate] = useState<Date>(new Date())
   const [activeTab, setActiveTab] = useState<"overview" | "expenses" | "income">("overview")
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
   const { transactions, getMonthlyTransactions, getTotalIncome, getTotalExpense, getBalance } = useFinance()
+
+  // 날짜 선택 시 통계 업데이트 함수
+  const updateStatistics = (newDate: Date | undefined) => {
+    if (newDate) {
+      // 날짜 상태 업데이트
+      setDate(newDate)
+
+      // 상세 날짜 정보 로그 출력
+      const formattedDate = format(newDate, "yyyy년 MM월 dd일 (EEEE)", { locale: ko })
+      console.log(`통계 업데이트: ${formattedDate}`)
+
+      // 선택한 연도와 월 정보
+      const year = getYear(newDate)
+      const month = getMonth(newDate)
+      console.log(`선택한 연도: ${year}, 월: ${month + 1}`)
+
+      // 해당 월의 거래 데이터 수
+      const monthTransactions = getMonthlyTransactions(year, month)
+      console.log(`해당 월 거래 데이터 수: ${monthTransactions.length}건`)
+
+      // 캘린더 팝오버 닫기
+      setIsCalendarOpen(false)
+    }
+  }
 
   // 현재 월의 시작일과 종료일
   const startDate = startOfMonth(date)
@@ -102,15 +127,15 @@ export default function StatisticsPage() {
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         <div className="flex items-center gap-2">
-          <Popover>
+          <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
             <PopoverTrigger asChild>
               <Button variant="outline" className="w-[240px] justify-start text-left font-normal">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {format(date, "yyyy년 MM월", { locale: ko })}
+                {format(date, "yyyy년 MM월 dd일", { locale: ko })}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <Calendar mode="month" selected={date} onSelect={(date) => date && setDate(date)} initialFocus />
+              <Calendar mode="month" selected={date} onSelect={updateStatistics} initialFocus />
             </PopoverContent>
           </Popover>
         </div>
