@@ -1,14 +1,18 @@
 "use client"
 
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
-
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Menu, Home, CreditCard, BarChart3, Settings, User } from "lucide-react"
+import { Menu, Home, CreditCard, BarChart3, Settings, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { cn } from "@/lib/utils"
 
 const routes = [
@@ -88,7 +92,7 @@ export function Header() {
           </SheetContent>
         </Sheet>
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <span className="font-bold text-xl hidden md:inline-block px-3 py-1">백조</span>
+          <span className="font-bold text-xl hidden md:inline-block">백조</span>
         </Link>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
           {routes.map((route) => (
@@ -117,6 +121,11 @@ export function Header() {
                 <DropdownMenuItem onClick={() => router.push("/mypage")}>
                   <User className="mr-2 h-4 w-4" />
                   <span>마이페이지</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>로그아웃</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
